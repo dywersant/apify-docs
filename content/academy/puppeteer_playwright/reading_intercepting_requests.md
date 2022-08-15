@@ -296,7 +296,9 @@ const page = await browser.newPage();
 const blockedExtensions = ['.png', '.css', '.jpg', '.jpeg', '.pdf', '.svg'];
 
 // Use CDP session to block resources
-await page.client().send('Network.setBlockedURLs', { urls: blockedExtensions });
+const client = await page.target().createCDPSession();
+await client.send("Network.setBlockedURLs", { urls: blockedExtensions });
+await client.send("Network.enable", {});
 
 await page.goto('https://soundcloud.com/tiesto/following');
 
